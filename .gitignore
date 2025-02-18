@@ -45,6 +45,10 @@ classified_documents/
 *.log
 *.tmp
 
+# Локальные файлы конфигурации
+.env
+.env.local
+
 # Модель (слишком большая для GitHub)
 results/fold_3/model.pth
 *.pth 
