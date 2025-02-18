@@ -166,7 +166,7 @@ class MainApp(QtWidgets.QMainWindow):
         layout.addWidget(self.status_label)
         
         logo_label = QtWidgets.QLabel()
-        pixmap = QtGui.QPixmap("AYU_Logo.png")
+        pixmap = QtGui.QPixmap("static/AYU_Logo.png")
         logo_label.setPixmap(pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio))
         logo_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(logo_label)
@@ -243,7 +243,7 @@ class LoginDialog(QtWidgets.QDialog):
         
         # Логотип (егер қажет болса)
         logo_label = QtWidgets.QLabel()
-        pixmap = QtGui.QPixmap("AYU_Logo.png")
+        pixmap = QtGui.QPixmap("static/AYU_Logo.png")
         logo_label.setPixmap(pixmap.scaled(150, 150, QtCore.Qt.KeepAspectRatio))
         logo_label.setAlignment(QtCore.Qt.AlignCenter)
         layout.addWidget(logo_label)
