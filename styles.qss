@@ -1,0 +1,170 @@
+/* -------------------- */
+/* Global Styles        */
+/* -------------------- */
+
+/* QMainWindow және QDialog үшін ортаңғы фон: қараңғы (#1E1E2E) */
+QMainWindow, QDialog {
+    background-color: #1E1E2E;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Барлық QLabel үшін: ақ мәтін */
+QLabel {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* -------------------- */
+/* Специальные элементы */
+/* -------------------- */
+
+/* Upload бетіндегі классификация туралы хабарды көрсету (objectName: uploadMessage) */
+QLabel#uploadMessage {
+    color: #1E1E2E;  /* Синий цвет */
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Диалогтағы файл атауын өзгерту өрісі (objectName: fileNameEdit) */
+QLineEdit#fileNameEdit {
+    color: white;  /* Синий текст */
+}
+
+/* -------------------- */
+/* Input Widgets        */
+/* -------------------- */
+
+/* QLineEdit (барлық терезелерде) */
+QLineEdit {
+    background-color: #2B2B3B;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #FF6F61;
+    font-size: 16px;
+}
+
+/* QComboBox (барлық терезелерде) */
+QComboBox {
+    background-color: #2B2B3B;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #FF6F61;
+    font-size: 16px;
+}
+
+/* -------------------- */
+/* Button Styles        */
+/* -------------------- */
+
+/* Негізгі батырмалар (upload, search, viewAll) */
+#uploadButton, #searchButton, #viewAllButton {
+    background-color: #1E1E2E;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    font-weight: bold;
+    padding: 10px 20px;
+}
+#uploadButton:hover, #searchButton:hover, #viewAllButton:hover {
+    background-color: #151E3D;
+}
+
+/* Артқа батырмасы */
+QPushButton#backButton {
+    background-color: #ff4b33;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    padding: 10px;
+}
+QPushButton#backButton:hover {
+    background-color: #ff6347;
+}
+
+/* Өңдеу батырмасы – сілтеме тәрізді көрінуі үшін */
+QPushButton#editButton {
+    background-color: transparent;
+    color: #FF6F61;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    padding: 4px;
+    text-decoration: underline;
+}
+QPushButton#editButton:hover {
+    color: #FF3D00;
+}
+
+/* -------------------- */
+/* Table and List Styles*/
+/* -------------------- */
+
+/* QTableWidget баған атаулары */
+QHeaderView::section {
+    background-color: #1E1E2E;
+    color: white;
+    padding: 8px;
+    border: 1px solid #FF6F61;
+    font-size: 14px;
+}
+
+/* QTableWidget негізгі стилі */
+QTableWidget {
+    background-color: #2B2B3B;
+    color: white;
+    gridline-color: #FF6F61;
+    font-size: 14px;
+    border: none;
+}
+
+/* QTableWidget ұяшықтары */
+QTableWidget::item {
+    padding: 6px;
+    border: 1px solid transparent;
+}
+
+/* Таңдалған ұяшық */
+QTableWidget::item:selected {
+    background-color: #FF6F61;
+    color: black;
+}
+
+/* Альтернативті қатарлар */
+QTableWidget::item:!selected:alternate {
+    background-color: #3C3C4E;
+}
+
+/* QListWidget стилі */
+QListWidget {
+    background-color: #2B2B3B;
+    color: white;
+    border: 1px solid #FF6F61;
+    padding: 8px;
+    font-size: 16px;
+}
+QListWidget::item {
+    padding: 10px;
+}
+QListWidget::item:selected {
+    background-color: #FF6F61;
+    color: black;
+}
+
+/* -------------------- */
+/* MessageBox Styles    */
+/* -------------------- */
+QMessageBox QLabel {
+    font-size: 14px;
+    color: green;
+    font-weight: bold;
+}
+
+/* -------------------- */
+/* Additional Layout    */
+/* -------------------- */
+/* (Бос кеңістіктер, margin және spacing элементтерге қолданылуы мүмкін) */
