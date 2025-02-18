@@ -7,9 +7,15 @@ import torch.nn as nn
 import torchvision.transforms as transforms
 from PIL import Image
 import timm
+from google.cloud import storage
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Замените на свой секретный ключ
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here')
+
+# Google Cloud Storage configuration
+BUCKET_NAME = "doc-class-storage"  # Замените на имя вашего бакета
+storage_client = storage.Client()
+bucket = storage_client.bucket(BUCKET_NAME)
 
 # Настройки загрузки файлов
 UPLOAD_FOLDER = 'classified_documents'
@@ -21,6 +27,23 @@ def get_db():
     db = sqlite3.connect('classified_documents.db')
     db.row_factory = sqlite3.Row
     return db
+
+# Инициализация базы данных
+def init_db():
+    with app.app_context():
+        db = get_db()
+        db.execute("""
+        CREATE TABLE IF NOT EXISTS documents (
+            document_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            document_name TEXT UNIQUE,
+            author TEXT,
+            secrecy_level TEXT,
+            class_name TEXT,
+            file_path TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+        db.commit()
 
 # Модель
 class HybridModel(nn.Module):
@@ -39,12 +62,21 @@ class HybridModel(nn.Module):
         return self.fc(x)
 
 # Загрузка модели
-model_path = 'results/fold_3/model.pth'
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-model = HybridModel().to(device)
-state_dict = torch.load(model_path, map_location=device)
-model.load_state_dict(state_dict)
-model.eval()
+def load_model():
+    model_path = 'results/fold_3/model.pth'
+    if not os.path.exists(model_path):
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        blob = bucket.blob('model.pth')
+        blob.download_to_filename(model_path)
+    
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    model = HybridModel().to(device)
+    state_dict = torch.load(model_path, map_location=device)
+    model.load_state_dict(state_dict)
+    model.eval()
+    return model
+
+model = load_model()
 
 # Преобразование изображения
 transform = transforms.Compose([
@@ -62,6 +94,11 @@ class_names = [
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload_to_gcs(file, filename):
+    blob = bucket.blob(f'documents/{filename}')
+    blob.upload_from_file(file)
+    return blob.public_url
 
 @app.route('/')
 def index():
@@ -99,11 +136,13 @@ def upload():
         
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(filepath)
+            
+            # Сохраняем временно для классификации
+            temp_path = os.path.join('/tmp', filename)
+            file.save(temp_path)
             
             # Классификация
-            image = Image.open(filepath).convert('RGB')
+            image = Image.open(temp_path).convert('RGB')
             image_tensor = transform(image).unsqueeze(0).to(device)
             
             with torch.no_grad():
@@ -111,13 +150,20 @@ def upload():
                 _, predicted = torch.max(output, 1)
                 predicted_class = class_names[predicted.item()]
             
+            # Загружаем в Google Cloud Storage
+            file.seek(0)
+            file_url = upload_to_gcs(file, filename)
+            
             # Сохранение в БД
             db = get_db()
             db.execute(
                 'INSERT INTO documents (document_name, class_name, file_path) VALUES (?, ?, ?)',
-                (filename, predicted_class, filepath)
+                (filename, predicted_class, file_url)
             )
             db.commit()
+            
+            # Удаляем временный файл
+            os.remove(temp_path)
             
             flash(f'Файл "{filename}" жүктелді және "{predicted_class}" санатына жіктелді')
             return redirect(url_for('index'))
@@ -142,5 +188,5 @@ def search():
     return render_template('search.html', documents=documents)
 
 if __name__ == '__main__':
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 10000))) 
+    init_db()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080))) 
