@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <form method="GET" class="d-flex">
+            <input type="text" name="query" class="form-control me-2" placeholder="Іздеу..." value="{{ request.args.get('query', '') }}">
+            <button type="submit" class="btn btn-primary">Іздеу</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Құжаттар тізімі</h2>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Құжат атауы</th>
+                                <th>Санаты</th>
+                                <th>Құрылған күні</th>
+                                <th>Әрекеттер</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in documents %}
+                            <tr>
+                                <td>{{ doc.document_name }}</td>
+                                <td>{{ doc.class_name }}</td>
+                                <td>{{ doc.created_at }}</td>
+                                <td>
+                                    <a href="{{ doc.file_path }}" class="btn btn-sm btn-primary" target="_blank">Қарау</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">Құжаттар табылмады</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

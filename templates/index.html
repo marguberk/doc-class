@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4">Архив құжаттарын басқару жүйесі</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Құжатты жүктеу</h5>
+                    <p class="card-text">Жаңа құжатты жүктеу және автоматты түрде жіктеу</p>
+                    <a href="{{ url_for('upload') }}" class="btn btn-primary">Жүктеу</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Құжат іздеу</h5>
+                    <p class="card-text">Бар құжаттарды іздеу және қарау</p>
+                    <a href="{{ url_for('search') }}" class="btn btn-primary">Іздеу</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

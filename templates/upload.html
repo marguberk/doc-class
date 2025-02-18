@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Құжатты жүктеу</h2>
+                <form method="POST" enctype="multipart/form-data" class="text-center">
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Құжатты таңдаңыз</label>
+                        <input type="file" class="form-control" id="file" name="file" accept=".pdf,.jpg,.jpeg,.png,.tiff" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Жүктеу</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
