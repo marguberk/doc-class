@@ -43,4 +43,8 @@ classified_documents/
 
 # Кэш и временные файлы
 *.log
-*.tmp 
+*.tmp
+
+# Модель (слишком большая для GitHub)
+results/fold_3/model.pth
+*.pth 
